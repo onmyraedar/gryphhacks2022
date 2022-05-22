@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="profile-compare-container">
-    <a class="profile-compare-btn" href="{{ url_for('compare') }}">COMPARE</a>
+    <a class="profile-compare-btn" href="{{ url_for('compare_form') }}">COMPARE</a>
 </div>
 <div class="profile-tab-navbar">
     <button class="profile-tab-btn" id="openByDefault" onclick="openProfileTab(event, 't5cats')">
@@ -12,14 +12,21 @@
     </button>
     <div class="profile-tab-container">
         <div id="t5cats" class="profile-tab-content">
-            {% for category in t5 %}
-                <p>{{ category }}: {{ t5[category] }} videos</p>
+                {% for category in t5 %}
+                <div class="t5cats-tab-content">
+                    <h4>|{{ "%20s"|format(category) }} |</h4>
+                    <p>{{ t5[category] }} videos</p>
+                </div>       
             {% endfor %}
         </div>
         <div id="rsubs" class="profile-tab-content">
             {% for sub in rsubs %}
-                <p>{{ sub }}</p>
-                <a href="{{ rsubs[sub] }}">{{ rsubs[sub] }}</a>
+                <p>{{ sub }}
+                    <a class="go-to-channel-btn" href="{{ rsubs[sub] }}">
+                        <img class="link-icon" src="/static/link-icon.png" alt="Link Icon">
+                        Go to Channel
+                    </a>
+                </p>    
             {% endfor %}
         </div>
     </div>

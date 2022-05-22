@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
+<h4>Comparing your profile with {{ user2 }}</h4>
 <div class="compare-profile-container">
-    <a class="compare-profile-btn" href="{{ url_for('profile') }}">BACK TO PROFILE</a>
+    <a class="compare-profile-btn" href="{{ url_for('profile', username=current_user.username) }}">BACK TO PROFILE</a>
 </div>
 <div class="compare-tab-navbar">
     <button class="compare-tab-btn" id="openByDefault" onclick="openCompareTab(event, 'commonChannels')">
@@ -26,7 +27,12 @@
         </div>
         <div id="videoRecs" class="compare-tab-content">
             {% for rec in video_recs %}
-                <p>{{ rec }} <a href="{{ video_recs[rec] }}">{{ video_recs[rec] }}</a></p>
+                <p>{{ rec }}
+                    <a class="go-to-channel-btn" href="{{ video_recs[rec] }}">
+                        <img class="link-icon" src="/static/link-icon.png" alt="Link Icon">
+                        Go to Video
+                    </a>
+                </p>
             {% endfor %}
         </div>
     </div>
