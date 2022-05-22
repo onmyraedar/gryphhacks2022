@@ -5,9 +5,14 @@ body {
     color: #ced4da;
     font-family: "Poppins", sans-serif;
     font-weight: 300;
+    margin: 0px 20px;
 }
 
 /* Header */
+
+header {
+    margin-bottom: 15px;
+}
 
 .header-content {
     display: flex;
@@ -33,7 +38,7 @@ body {
 .profile-step {
     background-color: #28293e;
     border-radius: 10px;
-    margin: 20px;
+    margin-bottom: 15px;
     padding: 20px;
     text-align: center;
 }
@@ -58,4 +63,45 @@ body {
     border-style: solid;
     border-color: #E13E42;
     margin: auto;
+}
+
+/* Login and registration forms */
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.registration-form-title,
+.login-form-title {
+    font-weight: 500;
+    font-size: 24px;
+    text-align: center;
+}
+
+.registration-form,
+.login-form {
+    width: 350px;
+    margin: auto;
+}
+
+.register-btn,
+.login-btn {
+    text-align: center;
+}
+
+.register-page-login-link-container,
+.login-page-register-link-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.register-page-login-link-container a,
+.login-page-register-link-container a {
+    font-size: 13px;
+    color: #ced4da;
+}
+
+.register-page-login-link-container:hover a,
+.login-page-register-link-container:hover a {
+    color: #E13E42;
 }
