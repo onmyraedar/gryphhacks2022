@@ -1,8 +1,9 @@
+from ast import Compare
 import json
 import os
 
 from coterieapp import app, bcrypt, db
-from coterieapp.forms import LoginForm, RegistrationForm
+from coterieapp.forms import CompareForm, LoginForm, RegistrationForm
 from coterieapp.generate_profile import compareLikes, compareSubs, generate_liked_vids, generate_t5_categories, RelevantSubs, videorecs
 from coterieapp.models import User
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
@@ -148,9 +149,9 @@ def data():
 
     return redirect(url_for("home"))
 
-@app.route("/profile")
-def profile():
-    print(current_user.vids_filepath)
+@app.route("/profile/<string:username>")
+def profile(username):
+    # print(current_user.vids_filepath)
     # Returns a dict of top 5 categories
     top_5_categories = generate_t5_categories(current_user.vids_filepath)
     # Returns a list of most relevant subscriptions
@@ -159,17 +160,31 @@ def profile():
     return render_template("profile.html", t5=top_5_categories, 
         rsubs=relevant_subs)
 
-@app.route("/compare")
-def compare():
-    user1subs = "speedob9bc650c10c54d5fb6302581387b3e52subs"
-    user2subs = "sphenice36d32af674f4994b58acc26a7564154subs"
+@app.route("/compareform", methods=["GET", "POST"])
+def compare_form():
+    form = CompareForm()
+    if form.validate_on_submit():
+        print("Validated!")
+        return redirect(url_for("compare", username1=current_user.username, username2=form.username.data))
+    return render_template("compare-form.html", form=form)
+
+@app.route("/compare/<string:username1>/<string:username2>")
+def compare(username1, username2):
+    # user1subs = "speedob9bc650c10c54d5fb6302581387b3e52subs"
+    # user2subs = "sphenice36d32af674f4994b58acc26a7564154subs"
+    # user1vids = "speedo3133755de2664b819a13198325c366edvids"
+    # user2vids = "sphenic8c82df195bd04699b5411acb300510aevids"
+    user1 = current_user
+    user2 = User.query.filter_by(username=username2).first()
+    user1subs = current_user.subs_filepath
+    user2subs = user2.subs_filepath
+    user1vids = current_user.vids_filepath
+    user2vids = user2.vids_filepath
     top_common_subs = compareSubs(user1subs, user2subs)
     # print(top_common_subs)
-    user1vids = "speedo3133755de2664b819a13198325c366edvids"
-    user2vids = "sphenic8c82df195bd04699b5411acb300510aevids"
     top_liked_vids = compareLikes(user1vids, user2vids)
     video_recs = videorecs(user1vids, user2vids)
-    return render_template("compare.html", common_subs=top_common_subs, common_likes=top_liked_vids, video_recs=video_recs)
+    return render_template("compare.html", common_subs=top_common_subs, common_likes=top_liked_vids, video_recs=video_recs, user2=username2)
 
 
 # User management

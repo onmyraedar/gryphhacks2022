@@ -3,6 +3,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
 
+class CompareForm(FlaskForm):
+    username = StringField("Username",
+        validators=[DataRequired(), Length(min=5, max=40)])
+    submit = SubmitField("Compare")    
+
 class LoginForm(FlaskForm):
     username = StringField("Username",
         validators=[DataRequired(), Length(min=5, max=40)])
