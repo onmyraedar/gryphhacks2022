@@ -151,3 +151,76 @@ header {
 .login-page-register-link-container:hover a {
     color: #E13E42;
 }
+
+/* Profile styling */
+.profile-tab-container,
+.compare-tab-container {
+    background-color: #28293e;
+    color: #ced4da;
+    padding: 15px;
+}
+
+.profile-tab-btn,
+.compare-tab-btn {
+    background-color: #c65555;
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #28293e;
+    font-weight: 300;
+    padding: 0px 18px;
+}
+
+.profile-tab-btn:hover,
+.compare-tab-btn:hover {
+    color: #ced4da;
+}
+
+.profile-tab-btn.active,
+.compare-tab-btn.active {
+    background-color: #28293e;
+    color: #ced4da;
+    font-weight: 500;
+}
+
+#t5cats {
+    text-align: center;
+}
+
+.profile-compare-container,
+.compare-profile-container {
+    display: flex;
+    justify-content: right;
+}
+
+.profile-compare-btn,
+.compare-profile-btn {
+    background-color: #c65555;
+    border-radius: 10px;
+    color: #28293e;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.profile-compare-btn:hover,
+.compare-profile-btn:hover {
+    color: #ced4da;    
+}
+
+.link-icon {
+    height: 20px;
+    width: auto;
+}
+
+.go-to-channel-btn {
+    background-color: #c65555;
+    border-radius: 10px;
+    color: #28293e;
+    padding: 2px 8px;
+    text-decoration: none;    
+}
+
+/* Compare page styling */
+h4 {
+    text-align: center;
+}
