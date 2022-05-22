@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +11,7 @@ app.config["SECRET_KEY"] = secret_key
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 SESSION_TYPE = "filesystem"
 app.config.from_object(__name__)
