@@ -1,10 +1,46 @@
 {% extends "layout.html" %}
 {% block content %}
-{% for category in t5 %}
-    <p>{{ category }}: {{ t5[category] }} videos</p>
-{% endfor %}
-<p>----------------------------------------------</p>
-{% for sub in rsubs %}
-    <p>{{ sub }}: {{ rsubs[sub] }}</p>
-{% endfor %}
+<div class="profile-compare-container">
+    <a class="profile-compare-btn" href="{{ url_for('compare') }}">COMPARE</a>
+</div>
+<div class="profile-tab-navbar">
+    <button class="profile-tab-btn" id="openByDefault" onclick="openProfileTab(event, 't5cats')">
+        TOP CATEGORIES
+    </button>
+    <button class="profile-tab-btn" onclick="openProfileTab(event, 'rsubs')">
+        TOP SUBSCRIPTIONS
+    </button>
+    <div class="profile-tab-container">
+        <div id="t5cats" class="profile-tab-content">
+            {% for category in t5 %}
+                <p>{{ category }}: {{ t5[category] }} videos</p>
+            {% endfor %}
+        </div>
+        <div id="rsubs" class="profile-tab-content">
+            {% for sub in rsubs %}
+                <p>{{ sub }}</p>
+                <a href="{{ rsubs[sub] }}">{{ rsubs[sub] }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock content %}
+{% block scripts %}
+<script>
+function openProfileTab(event, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("profile-tab-content");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("profile-tab-btn");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  event.currentTarget.className += " active";
+}
+
+document.getElementById("openByDefault").click();    
+</script>
+{% endblock scripts %}

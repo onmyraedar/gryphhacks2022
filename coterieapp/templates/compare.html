@@ -1,10 +1,53 @@
 {% extends "layout.html" %}
 {% block content %}
-{% for sub in common_subs %}
-    <p>{{ sub }}</p>
-{% endfor %}
-<p>----------------------------------------------</p>
-{% for vid in common_likes %}
-    <p>{{ vid }}</p>
-{% endfor %}
+<div class="compare-profile-container">
+    <a class="compare-profile-btn" href="{{ url_for('profile') }}">BACK TO PROFILE</a>
+</div>
+<div class="compare-tab-navbar">
+    <button class="compare-tab-btn" id="openByDefault" onclick="openCompareTab(event, 'commonChannels')">
+        COMMON CHANNELS
+    </button>
+    <button class="compare-tab-btn" onclick="openCompareTab(event, 'commonVids')">
+        COMMON VIDEOS
+    </button>
+    <button class="compare-tab-btn" onclick="openCompareTab(event, 'videoRecs')">
+        VIDEO RECOMMENDATIONS
+    </button>
+    <div class="compare-tab-container">
+        <div id="commonChannels" class="compare-tab-content">
+            {% for sub in common_subs %}
+                <p>{{ sub }}</p>
+            {% endfor %}
+        </div>
+        <div id="commonVids" class="compare-tab-content">
+            {% for vid in common_likes %}
+                <p>{{ vid }}</p>
+            {% endfor %}
+        </div>
+        <div id="videoRecs" class="compare-tab-content">
+            {% for rec in video_recs %}
+                <p>{{ rec }} <a href="{{ video_recs[rec] }}">{{ video_recs[rec] }}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock content %}
+{% block scripts %}
+<script>
+    function openCompareTab(event, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("compare-tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("compare-tab-btn");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+    
+    document.getElementById("openByDefault").click();    
+    </script>
+{% endblock scripts %}
