@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for category in t5 %}
+    <p>{{ category }}: {{ t5[category] }} videos</p>
+{% endfor %}
+<p>----------------------------------------------</p>
+{% for sub in rsubs %}
+    <p>{{ sub }}: {{ rsubs[sub] }}</p>
+{% endfor %}
+{% endblock content %}

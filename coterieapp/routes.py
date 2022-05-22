@@ -3,6 +3,7 @@ import os
 
 from coterieapp import app, bcrypt, db
 from coterieapp.forms import LoginForm, RegistrationForm
+from coterieapp.generate_profile import generate_t5_categories, RelevantSubs
 from coterieapp.models import User
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_user, logout_user, login_required
@@ -118,7 +119,7 @@ def data():
         if next_page_token is None:
             break
     
-    print(subscriptions)
+    # print(subscriptions)
 
     jsonSubList = json.dumps(subscriptions) 
     jsonSubFile = open("{}.json".format(current_user.subs_filepath), "w")
@@ -136,7 +137,7 @@ def data():
         if next_page_token is None:
             break
 
-    print(videos)
+    # print(videos)
 
     jsonVidList = json.dumps(videos)
     jsonVidFile = open("{}.json".format(current_user.vids_filepath), "w")
@@ -145,7 +146,17 @@ def data():
     
     current_user.existing_data_profile = True
 
-    return jsonify(**videos)
+    return redirect(url_for("home"))
+
+@app.route("/profile")
+def profile():
+    print(current_user.vids_filepath)
+    # Returns a dict of top 5 categories
+    top_5_categories = generate_t5_categories(current_user.vids_filepath)
+    # Returns a list of most relevant subscriptions
+    relevant_subs = RelevantSubs(current_user.subs_filepath)
+    return render_template("profile.html", t5=top_5_categories, rsubs=relevant_subs)
+
 
 # User management
 
