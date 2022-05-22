@@ -1,3 +1,6 @@
+import json
+import os
+
 from coterieapp import app, bcrypt, db
 from coterieapp.forms import LoginForm, RegistrationForm
 from coterieapp.models import User
@@ -7,6 +10,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from uuid import uuid4
 
 CLIENT_SECRETS_FILE = "client_secrets.json"
 SCOPES = ["https://www.googleapis.com/auth/youtube",
@@ -90,27 +94,57 @@ def oauth2callback():
     flash("Your account has been successfully authenticated.", "secondary")
     return redirect(url_for("home"))
 
-@app.route("/test")
-def test():
-    if "credentials" not in session:
-        return redirect("authenticate")
+@app.route("/data")
+def data():
+    session["credentials"] = {
+        "token": current_user.token,
+        #"refresh_token": current_user.refresh_token,       # We do not need to refresh credentials
+        "token_uri": current_user.token_uri,
+        "client_id": current_user.client_id,
+        "client_secret": current_user.client_secret,
+        "scopes": current_user.scopes.split("<SEP>")
+    }
     credentials = Credentials(**session["credentials"])
     youtube = build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials
     )
-    subscriptions = youtube.subscriptions().list(mine=True, part='snippet', maxResults=50, order='relevance').execute()
+
+    subscriptions = []
+    next_page_token = None
+    while 1:
+        result = youtube.subscriptions().list(mine=True, part='snippet', maxResults=50, order='relevance', pageToken=next_page_token).execute()
+        subscriptions.append(result['items'])
+        next_page_token = result.get('nextPageToken')
+        if next_page_token is None:
+            break
+    
     print(subscriptions)
+
+    jsonSubList = json.dumps(subscriptions) 
+    jsonSubFile = open("{}.json".format(current_user.subs_filepath), "w")
+    jsonSubFile.write(jsonSubList)
+    jsonSubFile.close()
+
     print("Moving on to videos...")
-    videos = youtube.videos().list(part='snippet', myRating='like', maxResults=50).execute()
+
+    videos = []
+    next_page_token = None
+    while 1:
+        result = youtube.videos().list(part='snippet', myRating='like', maxResults=50, pageToken=next_page_token).execute()
+        videos.append(result['items'])
+        next_page_token = result.get('nextPageToken')
+        if next_page_token is None:
+            break
+
     print(videos)
-    session["credentials"] = {
-        "token": credentials.token,
-        "refresh_token": credentials.refresh_token,
-        "token_uri": credentials.token_uri,
-        "client_id": credentials.client_id,
-        "client_secret": credentials.client_secret,
-        "scopes": credentials.scopes
-    }
+
+    jsonVidList = json.dumps(videos)
+    jsonVidFile = open("{}.json".format(current_user.vids_filepath), "w")
+    jsonVidFile.write(jsonVidList)
+    jsonVidFile.close()
+    
+    current_user.existing_data_profile = True
+
     return jsonify(**videos)
 
 # User management
@@ -124,7 +158,9 @@ def register():
         hashed_pw = bcrypt.generate_password_hash(registration_form.password.data).decode("utf-8")
         new_user = User(
             username=registration_form.username.data,
-            password=hashed_pw
+            password=hashed_pw,
+            subs_filepath=registration_form.username.data+uuid4().hex+"subs",
+            vids_filepath=registration_form.username.data+uuid4().hex+"vids"
         )
         db.session.add(new_user)
         db.session.commit()
@@ -151,4 +187,9 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
-# Auxiliary (non-route) functions
+# Auxiliary function for joining filenames
+def join_fn(folder, fn, ext):
+    save_path = f"/{folder}"
+    file_name = f"{fn}{ext}"
+    complete_name = os.path.join(save_path, file_name)
+    return complete_name
