@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="registration-form">
+    <p class="registration-form-title">REGISTER</p>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <div class="form-group">
+                {{ form.username.label(class="form-control.label") }}
+                {% if form.username.errors %}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-control.label") }}
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>        
+        </fieldset>
+        <div class="form-group register-btn">
+            {{ form.submit(class="btn btn-outline-danger") }}
+        </div>
+    </form>
+    <div class="register-page-login-link-container"><a href="{{ url_for('login') }}">I already have an account</a></div>
+</div>
+
+{% endblock content %}
