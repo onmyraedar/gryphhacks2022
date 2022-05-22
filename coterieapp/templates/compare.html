@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+{% for sub in common_subs %}
+    <p>{{ sub }}</p>
+{% endfor %}
+<p>----------------------------------------------</p>
+{% for vid in common_likes %}
+    <p>{{ vid }}</p>
+{% endfor %}
+{% endblock content %}
