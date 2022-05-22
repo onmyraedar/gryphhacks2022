@@ -1,19 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap');
 
 body {
-    background-color: #2f3c60;
+    background-color: #1e1e2f;
+    color: #ced4da;
     font-family: "Poppins", sans-serif;
+    font-weight: 300;
 }
 
-header {
-    justify-content: space-between;
+/* Header */
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-header img {
+.header-logo {
     height: 80px;
     width: auto;
+    margin-right: 10px;
 }
 
-p {
-    color: white;
+.header-app-name {
+    color: #ced4da;
+    font-size: 36px;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+/* Homepage */
+
+.profile-step {
+    background-color: #28293e;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-step a {
+    color: #E13E42;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.profile-step div:hover {
+    background-color: #E13E42;
+    color: #ced4da;
+}
+
+.profile-step div:hover a {
+    color: #ced4da;
+}
+
+.profile-step-link-container {
+    width: 250px;
+    border-style: solid;
+    border-color: #E13E42;
+    margin: auto;
 }
